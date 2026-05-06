@@ -1,0 +1,5 @@
+/* Hide the mkdocs-static-i18n language switcher while keeping both locales buildable. */
+.md-header__option:has(> .md-select),
+.md-header__option > .md-select {
+  display: none !important;
+}

@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "powerzoo"
+version = "0.2.0"
+description = "A power-grid RL benchmark for the ML/CS community"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = { text = "MIT" }
+keywords = ["reinforcement-learning", "power-systems", "benchmark", "multi-agent"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    # numerics / data
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    # RL standard interface  (replaces legacy gym)
+    "gymnasium>=0.29",
+    # power-flow backend
+    "pandapower>=2.13",
+    # data formats
+    "pyarrow>=14",
+    "fastparquet>=2024",
+    # visualisation (render + offline analysis)
+    "matplotlib>=3.7",
+    "networkx>=3.1",
+    # misc
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# Commercial LP solver — fast, but requires a Gurobi license.
+# pip install powerzoo[gurobi]
+gurobi = ["gurobipy>=11"]
+
+# CVXPY open-source solver backends (GLPK / ECOS / SCS)
+# pip install powerzoo[cvxpy]
+cvxpy = ["cvxpy>=1.4"]
+
+# RL training frameworks — used only in examples/, NOT the benchmark core.
+# pip install powerzoo[rl]
+rl = [
+    "stable-baselines3>=2.0",
+    "torch>=2.0",
+]
+rllib = [
+    "ray[rllib]>=2.9",
+]
+
+# Multi-agent environment interface
+# pip install powerzoo[marl]
+marl = [
+    "pettingzoo>=1.24",
+]
+
+# Charting extras (pyecharts dashboards)
+charts = [
+    "pyecharts>=2.0",
+]
+
+# Documentation site
+docs = [
+    "mkdocs>=1.6,<2.0",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.25",
+    "mkdocs-static-i18n>=1.2",
+    # 0.26.0 wheel omits templates/mkdocs_html/assets/index.css → nbconvert TemplateNotFound in CI
+    "mkdocs-jupyter>=0.24,<0.26",
+]
+
+# Full developer install: pip install powerzoo[dev]
+dev = [
+    "pytest>=7",
+    "pytest-cov",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "functional: end-to-end functional tests from an RL user perspective",
+]
+
+[tool.setuptools.packages.find]
+include = ["powerzoo*"]
+
+[tool.setuptools.package-data]
+"powerzoo.case.raw_cases" = ["case14.json"]

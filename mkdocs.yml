@@ -1,0 +1,148 @@
+site_name: PowerZoo
+site_description: A power system simulation framework for reinforcement learning research
+repo_url: https://github.com/powerzoojax/PowerZooPy
+repo_name: powerzoojax/PowerZooPy
+docs_dir: docs
+
+# Work around mkdocs-jupyter + mkdocs-static-i18n: ensure notebooks go through nbconvert (not raw JSON).
+hooks:
+  - docs/hooks.py
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - mkdocs-jupyter:
+      execute: false       # Do not re-run notebooks at build time (use saved outputs).
+      include_source: true # Offer .ipynb download button.
+      # Notebooks are hidden from the public docs for now.
+      # Set POWERZOO_DOCS_INCLUDE_NOTEBOOKS=true for a private/full notebook render.
+      enabled: !ENV [POWERZOO_DOCS_INCLUDE_NOTEBOOKS, false]
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: false
+            show_root_heading: true
+            show_symbol_type_heading: true
+            members_order: source
+            docstring_style: google
+            merge_init_into_class: true
+  - i18n:
+      docs_structure: folder
+      fallback_to_default: true
+      reconfigure_material: true
+      languages:
+        # Default locale lives under /en/ in the built site (not at site root). Without this,
+        # mkdocs-static-i18n assumes link "/" and hreflang alternates point to /examples/... which
+        # does not exist for .ipynb pages — use /en/ so the language switcher matches real URLs.
+        - locale: en
+          default: true
+          name: English
+          build: true
+          link: /en/
+        - locale: zh
+          name: Chinese
+          build: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Concepts:
+    - Overview: concepts/overview.md
+    - Python API Contract: concepts/python-contract.md
+    - Reward and Cost Split: concepts/reward-cost-split.md
+    - Power Systems Primer: concepts/power-systems-primer.md
+  - Architecture:
+    - Repository Map: architecture/repo-map.md
+    - Environment Stack: architecture/env-stack.md
+    - Data Pipeline: architecture/data-pipeline.md
+    - Training Pipeline: architecture/training-pipeline.md
+  - Physics:
+    - Transmission: physics/transmission.md
+    - Distribution: physics/distribution.md
+    - Resources: physics/resources.md
+    - Markets: physics/markets.md
+    - Microgrid: physics/microgrid.md
+  - Benchmarks:
+    - Overview: benchmarks/overview.md
+    - TSO: benchmarks/tso.md
+    - DSO: benchmarks/dso.md
+    - DERs: benchmarks/ders.md
+    - DC microgrid: benchmarks/dc-microgrid.md
+    - GenCos: benchmarks/gencos.md
+  - Training:
+    - Wrappers: training/wrappers.md
+    - Trainers: training/trainers.md
+    - Presets: training/presets.md
+    - Custom Loops: training/custom-loops.md
+  - Examples:
+    - Overview: examples/index.md
+  - API Reference:
+    - Grid Environments: api/grid.md
+    - Resources: api/resource.md
+    - Market Environments: api/market.md
+    - Cases: api/case.md
+    - Orchestration & data: api/orchestration.md
+    - Tasks: api/tasks.md
+    - Wrappers: api/wrappers.md
+    - Offline datasets: api/offline.md
+extra_javascript:
+  - javascripts/mathjax.js
+  # jsdelivr tends to be more reliable than unpkg for local preview (fewer hangs on slow/blocked CDN).
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/powerzoojax/PowerZooPy
