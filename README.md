@@ -11,6 +11,7 @@ grid traces.
 - Python: 3.10 – 3.12
 - License: MIT
 - Version: 0.2.0
+- Documentation: [PowerZoo docs](https://powerzoojax.github.io/PowerZooPy/)
 
 ## Install
 
